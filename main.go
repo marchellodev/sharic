@@ -4,43 +4,23 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net"
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 )
 
-func getIp() string {
-	addresses, err := net.InterfaceAddrs()
-	if err != nil {
-		return ""
-	}
-
-	for _, a := range addresses {
-		if ip, ok := a.(*net.IPNet); ok && !ip.IP.IsLoopback() {
-
-			if ip.IP.To4() != nil {
-				// todo as switch
-				if strings.HasPrefix(ip.IP.String(), "192.168") {
-					return ip.IP.String()
-				}
-				if strings.HasPrefix(ip.IP.String(), "172") {
-					return ip.IP.String()
-				}
-				if strings.HasPrefix(ip.IP.String(), "10.") {
-					return ip.IP.String()
-				}
-			}
-		}
-	}
-	return ""
-}
-
 func main() {
-	fmt.Println(getIp() + ":8080")
+
+	ip := getIp().String()
+
+	fmt.Println(ip)
+
+	discoveryDaemon()
+
+	//fmt.Println(portExists("127.0.0.1", 50500))
 	http.HandleFunc("/", handler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
+
 }
 
 func handler(w http.ResponseWriter, _ *http.Request) {
@@ -66,5 +46,4 @@ func handler(w http.ResponseWriter, _ *http.Request) {
 	if _, err = io.Copy(w, file); err != nil {
 		return
 	}
-
 }
