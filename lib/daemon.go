@@ -9,50 +9,56 @@ import (
 )
 
 type Peer struct {
-	ip   net.IP
-	port int
+	Ip   net.IP
+	Port int
 }
 
 func (p Peer) String() string {
-	return p.ip.String() + ":" + strconv.Itoa(p.port)
+	return p.Ip.String() + ":" + strconv.Itoa(p.Port)
 }
 
 // todo check sharik.json
-// todo discover other ports
+// todo discover few ports at a time
+// todo use Ping to form a list of devices in the network
+// todo reuse local ip, dont just fetch it every time needed
 func RunDiscoveryDaemon(sleep time.Duration, feedback func([]Peer)) {
 	for {
-		ips := strings.Split(GetLocalIp().String(), ".")
+		local, _ := GetLocalIp()
+		ips := strings.Split(local.String(), ".")
 		ip := ips[0] + "." + ips[1] + "." + ips[2] + "."
 
-		feedback(run(ip, 50500))
+		feedback(Run(ip, 50500, local.String()))
 
 		time.Sleep(sleep)
 	}
 
 }
 
-// help needed, there is probably a better approach
-func run(ip string, port int) []Peer {
+func Run(ip string, port int, exclude string) []Peer {
 	if !strings.HasSuffix(ip, ".") {
 		return []Peer{}
 	}
 
 	wg := sync.WaitGroup{}
-	wg.Add(256)
+	wg.Add(253)
 
 	var peers []Peer
 
-	for i := 0; i <= 255; i++ {
+	for i := 1; i < 255; i++ {
 		_ip := ip + strconv.Itoa(i)
+
+		if _ip == exclude {
+			continue
+		}
+
 		go func() {
 
 			if DoesPortExist(_ip, port) {
 				peers = append(peers, Peer{
-					ip:   net.ParseIP(_ip),
-					port: port,
+					Ip:   net.ParseIP(_ip),
+					Port: port,
 				})
 			}
-			time.Sleep(1 * time.Second)
 
 			wg.Done()
 

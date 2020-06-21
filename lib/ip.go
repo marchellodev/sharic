@@ -1,14 +1,81 @@
 package lib
 
 import (
+	"fmt"
 	"net"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
-// todo works awfully (172.20.10.4)
-func GetLocalIp() net.IP {
+// todo improve performance (goroutine management)
+/// if bool is true, ip was fetched the ping way
+func GetLocalIp() (net.IP, bool) {
+
+	arr := getLocalIps()
+
+	var result net.IP
+	for _, el := range arr {
+		if result != nil {
+			break
+		}
+
+		ips := strings.Split(el.String(), ".")
+		ip := ips[0] + "." + ips[1] + "." + ips[2] + "."
+
+		wg := sync.WaitGroup{}
+		wg.Add(253)
+
+		for i := 1; i < 255; i++ {
+			_ip := ip + strconv.Itoa(i)
+
+			if _ip == el.String() {
+				continue
+			}
+
+			go func() {
+				if Ping(_ip) {
+					result = el
+				}
+
+				wg.Done()
+
+			}()
+
+		}
+		wg.Wait()
+
+	}
+
+	if result != nil {
+		return result, true
+	}
+
+	fmt.Println("failure")
+
+	for _, el := range arr {
+		if strings.HasPrefix(el.String(), "192.168") {
+			return el, false
+		}
+	}
+
+	for _, el := range arr {
+		if strings.HasPrefix(el.String(), "172") {
+			return el, false
+		}
+	}
+
+	for _, el := range arr {
+		if strings.HasPrefix(el.String(), "10.") {
+			return el, false
+		}
+	}
+
+	return nil, false
+}
+
+func getLocalIps() []net.IP {
 	addresses, err := net.InterfaceAddrs()
 	if err != nil {
 		return nil
@@ -21,31 +88,13 @@ func GetLocalIp() net.IP {
 			arr = append(arr, ip.IP)
 		}
 	}
-	//fmt.Println(arr)
 
-	for _, el := range arr {
-		if strings.HasPrefix(el.String(), "192.168") {
-			return el
-		}
-	}
-
-	for _, el := range arr {
-		if strings.HasPrefix(el.String(), "172") {
-			return el
-		}
-	}
-
-	for _, el := range arr {
-		if strings.HasPrefix(el.String(), "10.") {
-			return el
-		}
-	}
-
-	return nil
+	return arr
 }
 
 func GetLocalPort() int {
-	ip := GetLocalIp().String()
+	result, _ := GetLocalIp()
+	ip := result.String()
 
 	if port := 50500; !DoesPortExist(ip, port) {
 		return port

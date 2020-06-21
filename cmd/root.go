@@ -22,7 +22,7 @@ var rootCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		ip := lib.GetLocalIp()
+		ip, _ := lib.GetLocalIp()
 		port := lib.GetLocalPort()
 		go func() {
 			lib.RunServer(args[0], port)
