@@ -7,7 +7,7 @@ import (
 )
 
 var blackList = []string{
-	"unreachable", "unknown", "100% packet loss", "failed", "failure",
+	"unreachable", "unknown", "100% packet loss", "failed", "failure", "100% loss", "timed out",
 }
 
 func Ping(addr string) bool {
@@ -18,11 +18,11 @@ func Ping(addr string) bool {
 
 	switch runtime.GOOS {
 	case "windows":
-		cmd = exec.Command("ping", addr, "-n 1", "-w 10")
+		cmd = exec.Command("ping", addr, "-n", "1", "-w", "2")
 	case "linux":
-		cmd = exec.Command("ping", addr, "-c 1", "-w 2")
+		cmd = exec.Command("ping", addr, "-c", "1", "-w", "2")
 	case "android":
-		cmd = exec.Command("ping", addr, "-c 1", "-w 10")
+		cmd = exec.Command("ping", addr, "-c", "1", "-w", "2")
 	}
 
 	if cmd == nil {

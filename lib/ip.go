@@ -10,6 +10,7 @@ import (
 )
 
 // todo improve performance (goroutine management)
+// todo cache network name
 /// if bool is true, ip was fetched the ping way
 func GetLocalIp() (net.IP, bool) {
 

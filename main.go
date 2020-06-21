@@ -2,27 +2,18 @@ package main
 
 import (
 	"github.com/marchello/sharik-cli/cmd"
-	"net"
+	"os/exec"
+	"runtime"
 )
 
 func main() {
-	cmd.Execute()
-	//
-	//log.Println("started")
-	//log.Println(lib.GetLocalIp())
-	//lib.RunDiscoveryDaemon(1*time.Second, func(peers []lib.Peer) {
-	//	for _, p := range peers {
-	//		// todo dont repeat
-	//		fmt.Println("Discovered sharik: http://" + p.String())
-	//	}
-	//})
-}
-
-func consists(ips []net.IP, ip net.IP) bool {
-	for _, el := range ips {
-		if el.Equal(ip) {
-			return true
-		}
+	// setting english language in the terminal
+	switch runtime.GOOS {
+	case "windows":
+		exec.Command("chcp", "437").Output()
+	case "linux":
+		exec.Command("export", "LC_ALL=C").Output()
 	}
-	return false
+
+	cmd.Execute()
 }
