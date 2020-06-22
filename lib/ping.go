@@ -1,7 +1,6 @@
 package lib
 
 import (
-	"fmt"
 	"os/exec"
 	"runtime"
 	"strings"
@@ -32,8 +31,7 @@ func Ping(addr string) bool {
 
 	out, err := cmd.Output()
 	if err != nil {
-		fmt.Println("err cmd")
-		fmt.Println(err)
+		return false
 	}
 
 	for _, word := range blackList {
