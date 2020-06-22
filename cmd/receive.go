@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/marchello/sharik-cli/lib"
+	"github.com/marchello/sharic/lib"
 	"strings"
 	"time"
 

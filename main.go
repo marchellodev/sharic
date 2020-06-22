@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/marchello/sharik-cli/cmd"
+	"github.com/marchello/sharic/cmd"
 	"os/exec"
 	"runtime"
 )

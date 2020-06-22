@@ -1,4 +1,4 @@
-module github.com/marchello/sharik-cli
+module github.com/marchello/sharic
 
 go 1.14
 

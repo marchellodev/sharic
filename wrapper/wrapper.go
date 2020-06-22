@@ -2,7 +2,7 @@ package wrapper
 
 import (
 	"fmt"
-	"github.com/marchello/sharik-cli/lib"
+	"github.com/marchello/sharic/lib"
 )
 
 func GetIp() string {
