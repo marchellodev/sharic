@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"fmt"
 	"os/exec"
 	"runtime"
 	"strings"
@@ -22,14 +23,19 @@ func Ping(addr string) bool {
 	case "linux":
 		cmd = exec.Command("ping", addr, "-c", "1", "-w", "2")
 	case "android":
-		cmd = exec.Command("ping", addr, "-c", "1", "-w", "2")
+		cmd = exec.Command("/system/bin/ping", "-c", "1", "-w", "2", addr)
 	}
 
 	if cmd == nil {
-		panic("os is not supported")
+		panic("os is not supported, please file an issue")
 	}
 
-	out, _ := cmd.Output()
+	out, err := cmd.Output()
+	if err != nil {
+		fmt.Println("err cmd")
+		fmt.Println(err)
+	}
+
 	for _, word := range blackList {
 		if strings.Contains(string(out), word) {
 			return false
