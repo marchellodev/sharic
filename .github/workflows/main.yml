@@ -16,12 +16,23 @@ jobs:
 
       - name: Make binaries
         uses: sosedoff/actions/golang-build@master
-        # Uncomment to following piece to restrict targets
-        # with:
-        #   args: linux/amd64 darwin/amd64
+        with:
+        args: linux/amd64 windows/amd64 darwin/amd64
 
-      - name: Upload build results
+      - name: Upload build results (linux)
         uses: actions/upload-artifact@v1
         with:
           name: sharic_linux_amd64
           path: .release/sharic_linux_amd64
+
+      - name: Upload build results (win)
+        uses: actions/upload-artifact@v1
+        with:
+          name: sharic_windows_amd64.exe
+          path: .release/sharic_windows_amd64
+
+      - name: Upload build results (darwin)
+        uses: actions/upload-artifact@v1
+        with:
+          name: sharic_darwin_amd64
+          path: .release/sharic_darwin_amd64
