@@ -24,4 +24,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: sharic_linux_amd64
-          path: /github/workspace/.release/sharic_linux_amd64
+          path: /home/runner/work/sharic/sharic/.release/sharic_linux_amd64
