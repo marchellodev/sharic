@@ -17,7 +17,7 @@ jobs:
       - name: Make binaries
         uses: sosedoff/actions/golang-build@master
         with:
-        args: linux/amd64 windows/amd64 darwin/amd64
+          args: linux/amd64 windows/amd64 darwin/amd64
 
       - name: Upload build results (linux)
         uses: actions/upload-artifact@v1
