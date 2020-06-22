@@ -19,3 +19,9 @@ jobs:
         # Uncomment to following piece to restrict targets
         # with:
         #   args: linux/amd64 darwin/amd64
+
+      - name: Upload build results
+        uses: actions/upload-artifact@v1
+        with:
+          name: sharic_linux_amd64
+          path: sharic_linux_amd64
