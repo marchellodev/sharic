@@ -2,7 +2,7 @@ package wrapper
 
 import (
 	"fmt"
-	"github.com/marchello/sharic/lib"
+	"github.com/marchellodev/sharic/lib"
 	"net/http"
 	"runtime"
 )

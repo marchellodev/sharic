@@ -3,7 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"github.com/marchello/sharic/lib"
+	"github.com/marchellodev/sharic/lib"
 	"github.com/spf13/cobra"
 	"os"
 	"sync"
