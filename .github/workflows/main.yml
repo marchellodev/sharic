@@ -14,6 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
+        # todo create fork for go1.14 & ubuntu20.04
       - name: Make binaries
         uses: sosedoff/actions/golang-build@master
         with:

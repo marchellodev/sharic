@@ -23,6 +23,8 @@ func Ping(addr string) bool {
 		cmd = exec.Command("ping", addr, "-c", "1", "-w", "2")
 	case "android":
 		cmd = exec.Command("/system/bin/ping", "-c", "1", "-w", "2", addr)
+	case "darwin":
+		cmd = exec.Command("ping", addr, "-c", "1", "-W", "2")
 	}
 
 	if cmd == nil {
@@ -35,7 +37,7 @@ func Ping(addr string) bool {
 	}
 
 	for _, word := range blackList {
-		if strings.Contains(string(out), word) {
+		if strings.Contains(strings.ToLower(string(out)), word) {
 			return false
 		}
 	}

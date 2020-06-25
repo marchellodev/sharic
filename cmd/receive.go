@@ -30,10 +30,14 @@ var receiveCmd = &cobra.Command{
 		ips := strings.Split(ip.String(), ".")
 		fmt.Println("the search mask is:", ips[0]+"."+ips[1]+"."+ips[2]+".*")
 
-		lib.RunDiscoveryDaemon(2*time.Second, func(peers []lib.Peer) {
-			for _, p := range peers {
-				// todo dont repeat
-				fmt.Println("Discovered sharik: http://" + p.String())
+		// todo as a single function
+		lib.RunDiscoveryDaemon(2*time.Second, func(peer lib.Peer, status int) {
+			// todo interactive list
+			if status == lib.PeerAdd {
+				fmt.Println("Discovered sharik: http://" + peer.String())
+			}
+			if status == lib.PeerRemove {
+				fmt.Println("Sharik was closed: http://" + peer.String())
 			}
 		})
 

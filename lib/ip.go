@@ -128,3 +128,34 @@ func DoesPortExist(ip string, p int) bool {
 
 	return false
 }
+
+//
+//func ValidateLocalIp(input net.IP) bool {
+//
+//	ips := strings.Split(input.String(), ".")
+//	ip := ips[0] + "." + ips[1] + "." + ips[2] + "."
+//
+//	wg := sync.WaitGroup{}
+//	wg.Add(253)
+//
+//	found := false
+//	for i := 1; i < 255; i++ {
+//		_ip := ip + strconv.Itoa(i)
+//
+//		if _ip == el.String() {
+//			continue
+//		}
+//
+//		go func() {
+//			if Ping(_ip) {
+//				found = true
+//			}
+//
+//			wg.Done()
+//
+//		}()
+//
+//	}
+//	wg.Wait()
+//	return found
+//}

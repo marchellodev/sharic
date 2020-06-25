@@ -30,10 +30,14 @@ var rootCmd = &cobra.Command{
 		fmt.Printf("Serving at http://%s:%d\n", ip, port)
 
 		go func() {
-			lib.RunDiscoveryDaemon(10*time.Second, func(peers []lib.Peer) {
-				for _, p := range peers {
-					// todo dont repeat
-					fmt.Println("Discovered sharik: http://" + p.String())
+			lib.RunDiscoveryDaemon(2*time.Second, func(peer lib.Peer, status int) {
+				// todo interactive list
+				if status == lib.PeerAdd {
+					fmt.Println("Discovered sharik: http://" + peer.String())
+				}
+				if status == lib.PeerRemove {
+					fmt.Print("\033[H\033[2J")
+					fmt.Println("Sharik was closed: http://" + peer.String())
 				}
 			})
 		}()
