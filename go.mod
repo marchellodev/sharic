@@ -1,4 +1,4 @@
-module github.com/marchello/sharic
+module github.com/marchellodev/sharic
 
 go 1.14
 
