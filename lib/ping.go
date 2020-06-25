@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"fmt"
 	"os/exec"
 	"runtime"
 	"strings"
@@ -28,7 +29,8 @@ func Ping(addr string) bool {
 	}
 
 	if cmd == nil {
-		panic("os is not supported, please file an issue")
+		fmt.Println("os is not supported, please file an issue")
+		return false
 	}
 
 	out, err := cmd.Output()
