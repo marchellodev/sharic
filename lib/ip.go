@@ -2,12 +2,27 @@ package lib
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 )
+
+// todo .gitignore
+
+func GetOutboundIP() net.IP {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
+
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+
+	return localAddr.IP
+}
 
 // todo improve performance (goroutine management)
 // todo cache network name
@@ -49,6 +64,11 @@ func GetLocalIp() (net.IP, bool) {
 
 	}
 
+	fmt.Println("result the ping way")
+	fmt.Println(result)
+
+	fmt.Println("result the other way")
+	fmt.Println(GetOutboundIP())
 	if result != nil {
 		return result, true
 	}
