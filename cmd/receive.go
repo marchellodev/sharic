@@ -19,13 +19,13 @@ var receiveCmd = &cobra.Command{
 	Long:  `Looks for other devices sharik files using sharik in your local network`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("getting your ip...")
-		ip, ping := lib.GetLocalIp()
-
-		if ping {
-			fmt.Println("ip was fetched the ping way")
-		} else {
-			fmt.Println("ip was fetched the dumb, probably not-working way, please file an issue")
-		}
+		ip, _ := lib.GetLocalIp()
+		//
+		//if ping {
+		//	fmt.Println("ip was fetched the ping way")
+		//} else {
+		//	fmt.Println("ip was fetched the dumb, probably not-working way, please file an issue")
+		//}
 
 		ips := strings.Split(ip.String(), ".")
 		fmt.Println("the search mask is:", ips[0]+"."+ips[1]+"."+ips[2]+".*")

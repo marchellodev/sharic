@@ -17,13 +17,13 @@ var ipCmd = &cobra.Command{
 	Long:  `Prints your local ip. You can be accessed by it withing your local network`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("getting your ip...")
-		ip, ping := lib.GetLocalIp()
+		ip, _ := lib.GetLocalIp()
 
-		if ping {
-			fmt.Println("ip was fetched the ping way")
-		} else {
-			fmt.Println("ip was fetched the dumb, probably not-working way, please file an issue")
-		}
+		//if ping {
+		//	fmt.Println("ip was fetched the ping way")
+		//} else {
+		//	fmt.Println("ip was fetched the dumb, probably not-working way, please file an issue")
+		//}
 
 		fmt.Println("your ip is:", ip)
 
