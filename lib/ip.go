@@ -1,12 +1,9 @@
 package lib
 
 import (
-	"fmt"
 	"log"
 	"net"
 	"strconv"
-	"strings"
-	"sync"
 	"time"
 )
 
@@ -29,71 +26,74 @@ func GetOutboundIP() net.IP {
 /// if bool is true, ip was fetched the ping way
 func GetLocalIp() (net.IP, bool) {
 
-	arr := getLocalIps()
+	return GetOutboundIP(), true
 
-	var result net.IP
-	for _, el := range arr {
-		if result != nil {
-			break
-		}
-
-		ips := strings.Split(el.String(), ".")
-		ip := ips[0] + "." + ips[1] + "." + ips[2] + "."
-
-		wg := sync.WaitGroup{}
-		wg.Add(253)
-
-		for i := 1; i < 255; i++ {
-			_ip := ip + strconv.Itoa(i)
-
-			if _ip == el.String() {
-				continue
-			}
-
-			go func() {
-				if Ping(_ip) {
-					result = el
-				}
-
-				wg.Done()
-
-			}()
-
-		}
-		wg.Wait()
-
-	}
-
-	fmt.Println("result the ping way")
-	fmt.Println(result)
-
-	fmt.Println("result the other way")
-	fmt.Println(GetOutboundIP())
-	if result != nil {
-		return result, true
-	}
-
-	fmt.Println("failure")
-
-	for _, el := range arr {
-		if strings.HasPrefix(el.String(), "192.168") {
-			return el, false
-		}
-	}
-
-	for _, el := range arr {
-		if strings.HasPrefix(el.String(), "172") {
-			return el, false
-		}
-	}
-
-	for _, el := range arr {
-		if strings.HasPrefix(el.String(), "10.") {
-			return el, false
-		}
-	}
-
-	return nil, false
+	//
+	//arr := getLocalIps()
+	//
+	//var result net.IP
+	//for _, el := range arr {
+	//	if result != nil {
+	//		break
+	//	}
+	//
+	//	ips := strings.Split(el.String(), ".")
+	//	ip := ips[0] + "." + ips[1] + "." + ips[2] + "."
+	//
+	//	wg := sync.WaitGroup{}
+	//	wg.Add(253)
+	//
+	//	for i := 1; i < 255; i++ {
+	//		_ip := ip + strconv.Itoa(i)
+	//
+	//		if _ip == el.String() {
+	//			continue
+	//		}
+	//
+	//		go func() {
+	//			if Ping(_ip) {
+	//				result = el
+	//			}
+	//
+	//			wg.Done()
+	//
+	//		}()
+	//
+	//	}
+	//	wg.Wait()
+	//
+	//}
+	//
+	//fmt.Println("result the ping way")
+	//fmt.Println(result)
+	//
+	//fmt.Println("result the other way")
+	//fmt.Println(GetOutboundIP())
+	//if result != nil {
+	//	return result, true
+	//}
+	//
+	//fmt.Println("failure")
+	//
+	//for _, el := range arr {
+	//	if strings.HasPrefix(el.String(), "192.168") {
+	//		return el, false
+	//	}
+	//}
+	//
+	//for _, el := range arr {
+	//	if strings.HasPrefix(el.String(), "172") {
+	//		return el, false
+	//	}
+	//}
+	//
+	//for _, el := range arr {
+	//	if strings.HasPrefix(el.String(), "10.") {
+	//		return el, false
+	//	}
+	//}
+	//
+	//return nil, false
 }
 
 func getLocalIps() []net.IP {
