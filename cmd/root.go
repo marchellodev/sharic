@@ -12,7 +12,7 @@ import (
 
 // todo complete cmd
 var rootCmd = &cobra.Command{
-	Use:   "sharic [file]",
+	Use:   "sharic [file] [-tunnel]",
 	Short: "Sharic is a cli version of Sharik",
 	Long:  "Sharic shares files in your local network",
 	Args: func(cmd *cobra.Command, args []string) error {
@@ -29,6 +29,11 @@ var rootCmd = &cobra.Command{
 		}()
 		fmt.Printf("Serving at http://%s:%d\n", ip, port)
 
+		if len(args) == 2 {
+			url := lib.RunFrp(port)
+			fmt.Println("Tunnel is active: " + url)
+		}
+
 		go func() {
 			lib.RunDiscoveryDaemon(2*time.Second, func(peer lib.Peer, status int) {
 				// todo interactive list
@@ -41,6 +46,7 @@ var rootCmd = &cobra.Command{
 				}
 			})
 		}()
+
 		wg := sync.WaitGroup{}
 		wg.Add(1)
 		wg.Wait()
