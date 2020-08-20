@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	// setting english language in the terminal
+	//setting english language in the terminal
 	switch runtime.GOOS {
 	case "windows":
 		_, _ = exec.Command("chcp", "437").Output()
