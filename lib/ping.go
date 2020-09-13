@@ -19,13 +19,13 @@ func Ping(addr string) bool {
 
 	switch runtime.GOOS {
 	case "windows":
-		cmd = exec.Command("ping", addr, "-n", "1", "-w", "2")
+		cmd = exec.Command("ping", addr, "-n", "1", "-w", "1")
 	case "linux":
-		cmd = exec.Command("ping", addr, "-c", "1", "-w", "2")
+		cmd = exec.Command("ping", addr, "-c", "1", "-w", "1")
 	case "android":
-		cmd = exec.Command("/system/bin/ping", "-c", "1", "-w", "2", addr)
+		cmd = exec.Command("/system/bin/ping", "-c", "1", "-w", "1", addr)
 	case "darwin":
-		cmd = exec.Command("ping", addr, "-c", "1", "-W", "2")
+		cmd = exec.Command("ping", addr, "-c", "1", "-W", "1")
 	}
 
 	if cmd == nil {

@@ -17,5 +17,4 @@ func main() {
 
 	cmd.Execute()
 
-	// todo ping worker on background
 }

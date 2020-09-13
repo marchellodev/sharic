@@ -29,10 +29,10 @@ var rootCmd = &cobra.Command{
 		}()
 		fmt.Printf("Serving at http://%s:%d\n", ip, port)
 
-		if len(args) == 2 {
-			url := lib.RunFrp(port)
-			fmt.Println("Tunnel is active: " + url)
-		}
+		//if len(args) == 2 {
+		//url := lib.RunFrp(port)
+		//fmt.Println("Tunnel is active: " + url)
+		//}
 
 		go func() {
 			lib.RunDiscoveryDaemon(2*time.Second, func(peer lib.Peer, status int) {

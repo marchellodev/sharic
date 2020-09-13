@@ -1,8 +1,11 @@
 package lib
 
 import (
+	"fmt"
 	"net"
 	"strconv"
+	"strings"
+	"sync"
 	"time"
 )
 
@@ -24,56 +27,66 @@ func GetOutboundIP() net.IP {
 // todo cache network name
 /// if bool is true, ip was fetched the ping way
 func GetLocalIp() (net.IP, bool) {
+	arr := getLocalIps()
+
+	fmt.Println(arr)
+
+	var result net.IP
+
+	for _, el := range arr {
+		if result != nil {
+			break
+		}
+
+		ips := strings.Split(el.String(), ".")
+		if ips[3] == "1" || ips[0] == "10" {
+			continue
+		}
+
+		ip := ips[0] + "." + ips[1] + "." + ips[2] + "."
+
+		fmt.Println("Starting: " + ip)
+
+		wg := sync.WaitGroup{}
+		wg.Add(254)
+
+		for j := 1; j < 255; j++ {
+
+			if result != nil {
+				break
+			}
+
+			_ip := ip + strconv.Itoa(j)
+
+			if _ip == el.String() {
+				wg.Done()
+				continue
+			}
+
+			go func() {
+				if Ping(_ip) {
+					result = el
+				}
+
+				wg.Done()
+			}()
+
+		}
+
+		wg.Wait()
+
+		//for i := 1; i < 255; i++ {
+		//
+		//}
+		//
+		//wg.Wait()
+	}
+
+	if result != nil {
+		return result, true
+	}
 
 	return GetOutboundIP(), true
-
-	//
-	//arr := getLocalIps()
-	//
-	//var result net.IP
-	//for _, el := range arr {
-	//	if result != nil {
-	//		break
-	//	}
-	//
-	//	ips := strings.Split(el.String(), ".")
-	//	ip := ips[0] + "." + ips[1] + "." + ips[2] + "."
-	//
-	//	wg := sync.WaitGroup{}
-	//	wg.Add(253)
-	//
-	//	for i := 1; i < 255; i++ {
-	//		_ip := ip + strconv.Itoa(i)
-	//
-	//		if _ip == el.String() {
-	//			continue
-	//		}
-	//
-	//		go func() {
-	//			if Ping(_ip) {
-	//				result = el
-	//			}
-	//
-	//			wg.Done()
-	//
-	//		}()
-	//
-	//	}
-	//	wg.Wait()
-	//
-	//}
-	//
-	//fmt.Println("result the ping way")
-	//fmt.Println(result)
-	//
-	//fmt.Println("result the other way")
-	//fmt.Println(GetOutboundIP())
-	//if result != nil {
-	//	return result, true
-	//}
-	//
-	//fmt.Println("failure")
-	//
 	//for _, el := range arr {
 	//	if strings.HasPrefix(el.String(), "192.168") {
 	//		return el, false
@@ -178,3 +191,101 @@ func DoesPortExist(ip string, p int) bool {
 //	wg.Wait()
 //	return found
 //}
+
+/*
+
+
+func GetLocalIp() (net.IP, bool) {
+	arr := getLocalIps()
+
+	fmt.Println(arr)
+
+	var result net.IP
+
+	for _, el := range arr {
+		if result != nil {
+			break
+		}
+
+		ips := strings.Split(el.String(), ".")
+		if ips[3] == "1" {
+			continue
+		}
+
+		ip := ips[0] + "." + ips[1] + "." + ips[2] + "."
+
+		fmt.Println("Starting: " + ip)
+		for j := 0; j < 51; j++ {
+
+			if result != nil {
+				break
+			}
+
+			wg := sync.WaitGroup{}
+			wg.Add(5)
+
+			for i := 1; i < 6; i++ {
+				if j*5+i == 255 {
+					wg.Done()
+					continue
+				}
+
+				fmt.Println(j*5 + i)
+
+				_ip := ip + strconv.Itoa(j*5+i)
+				fmt.Println(_ip)
+
+				if _ip == el.String() {
+					wg.Done()
+					continue
+				}
+
+				go func() {
+					if Ping(_ip) {
+						result = el
+					}
+
+					wg.Done()
+				}()
+
+			}
+
+			wg.Wait()
+		}
+
+		//for i := 1; i < 255; i++ {
+		//
+		//}
+		//
+		//wg.Wait()
+	}
+
+	if result != nil {
+		return result, true
+	}
+
+	return GetOutboundIP(), true
+	//for _, el := range arr {
+	//	if strings.HasPrefix(el.String(), "192.168") {
+	//		return el, false
+	//	}
+	//}
+	//
+	//for _, el := range arr {
+	//	if strings.HasPrefix(el.String(), "172") {
+	//		return el, false
+	//	}
+	//}
+	//
+	//for _, el := range arr {
+	//	if strings.HasPrefix(el.String(), "10.") {
+	//		return el, false
+	//	}
+	//}
+	//
+	//return nil, false
+}
+
+
+
+*/

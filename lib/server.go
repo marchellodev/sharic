@@ -2,10 +2,7 @@ package lib
 
 import (
 	"encoding/json"
-	"io"
-	"log"
 	"net/http"
-	"os"
 	"runtime"
 	"strconv"
 )
@@ -18,27 +15,11 @@ type SharikJson struct {
 }
 
 func RunServer(fileName string, port int) {
-	http.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
-
-		file, err := os.Open(fileName)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		defer file.Close()
-
-		stats, _ := file.Stat()
-
-		w.Header().Set("Content-Type", "application/octet-stream; charset=utf-8")
-		w.Header().Set("Content-Transfer-Encoding", "Binary")
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-disposition", "attachment; filename="+fileName)
-		w.Header().Set("Content-length", strconv.FormatInt(stats.Size(), 10))
-
-		if _, err = io.Copy(w, file); err != nil {
-			return
-		}
+		http.ServeFile(w, r, fileName)
 	})
+
 	http.HandleFunc("/sharik.json", func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		sharik := SharikJson{
@@ -49,7 +30,6 @@ func RunServer(fileName string, port int) {
 		}
 		bytes, _ := json.Marshal(sharik)
 		_, _ = w.Write(bytes)
-
 	})
 	_ = http.ListenAndServe(":"+strconv.Itoa(port), nil)
 }
