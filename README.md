@@ -1,5 +1,6 @@
 ## Sharic
 **Sharik for command line**
+This repo is very very old, and untested, so please don't use it. I hope to rewrite backend of the app from Dart to Rust soon. That's when we'll have a proper cli version :)
 
 ### Install
 You can install it via golang packet manager:
